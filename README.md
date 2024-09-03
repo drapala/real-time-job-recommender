@@ -6,9 +6,17 @@ This repository serves as the central hub for the "Multistack Real-Time Job Reco
 
 The "Multistack Real-Time Job Recommendation Engine" is designed to offer real-time job recommendations by leveraging multiple microservices that communicate via Apache Kafka. 
 
+![Component Diagram](component_diagram_example_in_plantuml.png)
+
 - **Python Service**: Captures user events, manages sessions, interacts with MySQL and MongoDB, and publishes job recommendation events to Kafka. [More Details](https://github.com/drapala/job-recommender-py)
   
 - **Java Service**: Consumes events from Kafka, performs real-time data analysis using Presto, and manages structured data with MySQL. [More Details](https://github.com/drapala/job-recommendation-engine)
+
+## Data Flow
+
+The following diagram shows the flow of data between the services and components:
+
+![Sequence Diagram](sequence_diagram_example_in_plantuml.png)
 
 ## Technologies Used
 
