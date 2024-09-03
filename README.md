@@ -61,113 +61,30 @@ To run the full system, ensure you have the following:
 
 ## Setup Guide
 
-### Step 1: Clone the Repositories
+### Step 1: Clone the Repositories and Run Setup
 
-Clone both microservice repositories:
+Download this repository and run the appropriate setup script for your operating system.
 
-```bash
-git clone https://github.com/drapala/job-recommender-py.git
-git clone https://github.com/drapala/job-recommendation-engine.git
-```
+- **Linux/Mac:**
 
-### Step 2: Set Up the Python Service
+  Open a terminal, navigate to the repository folder, and run:
 
-Follow the setup instructions in the [Python Service README](https://github.com/drapala/job-recommender-py) to configure the environment locally.
+  ```bash
+  chmod +x setup.sh
+  ./setup.sh
+  ```
 
-### Step 3: Set Up the Java Service
+- **Windows:**
 
-Follow the setup instructions in the [Java Service README](https://github.com/drapala/job-recommendation-engine) to configure the environment locally.
+  Open PowerShell as Administrator, navigate to the repository folder, and run:
 
-### Step 4: Configure Docker Compose
+  ```powershell
+  ./setup.ps1
+  ```
 
-Create a `docker-compose.yml` file in the root of this repository to orchestrate both services and their dependencies, such as Kafka, MySQL, and MongoDB.
+### Step 2: Access the Application
 
-An example of a `docker-compose.yml`:
-
-```yaml
-version: '3.8'
-services:
-  mysql:
-    image: mysql:latest
-    environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: job_db
-      MYSQL_USER: dev_user
-      MYSQL_PASSWORD: dev_password
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-
-  mongo:
-    image: mongo:latest
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-
-  mongo-express:
-    image: mongo-express:latest
-    environment:
-      ME_CONFIG_MONGODB_SERVER: mongo
-      ME_CONFIG_MONGODB_PORT: 27017
-      ME_CONFIG_BASICAUTH_USERNAME: admin
-      ME_CONFIG_BASICAUTH_PASSWORD: password
-    ports:
-      - "8081:8081"
-    depends_on:
-      - mongo
-
-  zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-    ports:
-      - "2181:2181"
-
-  kafka:
-    image: confluentinc/cp-kafka:latest
-    ports:
-      - "9092:9092"
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    depends_on:
-      - zookeeper
-
-  python-service:
-    build: ./job-recommender-py
-    depends_on:
-      - mysql
-      - mongo
-      - kafka
-    ports:
-      - "5000:5000"
-
-  java-service:
-    build: ./job-recommendation-engine
-    depends_on:
-      - mysql
-      - kafka
-    ports:
-      - "8080:8080"
-
-volumes:
-  mysql_data:
-  mongo_data:
-```
-
-### Step 5: Run the Full System
-
-To run the entire system, execute the following command:
-
-```bash
-docker-compose up
-```
+Once the setup script completes, the services should be running, and you can access the applications via their respective endpoints.
 
 ## Communication Between Services
 
